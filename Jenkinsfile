@@ -13,16 +13,15 @@ pipeline {
 
     post {
         always {
-            echo 'Sending email notification with build log attached...'
+            echo 'Sending fallback email notification...'
             
-            emailext (
-                subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
-                body: """Pipeline completed with status: ${currentBuild.currentResult}.
+            mail to: 'tkaushik130622@gmail.com',
+                 ssubject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
+                 body: """Pipeline completed with status: ${currentBuild.currentResult}.
                          Please check the attached build log for details.""",
-                to: 'tkaushik130622@gmail.com',
                 attachLog: true,  // This attaches the full build log
                 mimeType: 'text/plain'  // Plain text for simplicity
-            )
+
         }
     }
 }
