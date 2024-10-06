@@ -62,12 +62,24 @@ pipeline {
     post {
         always {
             echo 'Sending email notifications...'
-            emailext (
-                subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
-                body: "Pipeline completed with status: ${currentBuild.currentResult}",
-                to: 'tkaushik130622@gmail.com',
-                attachLog: true
-            )
+
+            // Try to use Email Extension plugin
+            script {
+                try {
+                    emailext (
+                        subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
+                        body: "Pipeline completed with status: ${currentBuild.currentResult}",
+                        to: 'tkaushik130622@gmail.com',
+                        attachLog: true
+                    )
+                } catch (Exception e) {
+                    // Fallback to simple mail if emailext fails
+                    echo 'Email Extension plugin failed. Falling back to simple mail...'
+                    mail to: 'tkaushik130622@gmail.com',
+                         subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
+                         body: "Pipeline completed with status: ${currentBuild.currentResult}"
+                }
+            }
         }
     }
 }
