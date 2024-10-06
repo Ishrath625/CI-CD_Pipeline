@@ -13,7 +13,8 @@ pipeline {
     post {
         always {
             script {
-                def buildLog = currentBuild.getLog(100).join('\n')
+                // Get the last 100 lines of the build log
+                def buildLog = currentBuild.rawBuild.getLog(100).join('\n')
                 emailext (
                     subject: "${currentBuild.fullDisplayName} - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
                     body: """\
@@ -24,7 +25,7 @@ pipeline {
                         Build Number: ${env.BUILD_NUMBER}
                         Status: ${currentBuild.currentResult}
                     """,
-                    to: 'tkaushik130622@gmail.com'
+                    to: 'tkaushik130622@gmail.com'  // Replace with your recipient email
                 )
             }
         }
