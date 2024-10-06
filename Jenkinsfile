@@ -4,20 +4,29 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building the application...'
-                echo 'Running build process...'
-                echo 'Build completed successfully.'
+                // Your build steps go here
+                echo 'Building...'
             }
         }
     }
 
     post {
         always {
-            echo 'Sending fallback email notification...'
-            
-            mail to: 'tkaushik130622@gmail.com',
-                 subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
-                 body: "Pipeline completed with status: ${currentBuild.currentResult}. Please check Jenkins for more details."
+            script {
+                def buildLog = currentBuild.getLog(100).join('\n')
+                emailext (
+                    subject: "${currentBuild.fullDisplayName} - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                    body: """\
+                        Build log:
+                        ${buildLog}
+                        
+                        Job: ${env.JOB_NAME}
+                        Build Number: ${env.BUILD_NUMBER}
+                        Status: ${currentBuild.currentResult}
+                    """,
+                    to: 'tkaushik130622@gmail.com'
+                )
+            }
         }
     }
 }
