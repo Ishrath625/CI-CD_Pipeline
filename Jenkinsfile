@@ -75,7 +75,7 @@ pipeline {
                 } catch (Exception e) {
                     // Fallback to simple mail if emailext fails
                     echo 'Email Extension plugin failed. Falling back to simple mail...'
-                    mail to: 'tkaushik130622@gmail.com',
+                    mail to: 'ishrathrfw@gmail.com',
                          subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
                          body: "Pipeline completed with status: ${currentBuild.currentResult}"
                 }
