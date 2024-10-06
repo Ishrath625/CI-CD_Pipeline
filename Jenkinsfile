@@ -5,17 +5,27 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the application...'
+                // Simulating some log output
+                echo 'Running build process...'
+                echo 'Build completed successfully.'
             }
         }
     }
 
     post {
         always {
-            echo 'Sending fallback email notification...'
+            echo 'Sending email notification with build log attached...'
             
-            mail to: 'tkaushik130622@gmail.com',
-                 subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
-                 body: "Pipeline completed with status: ${currentBuild.currentResult}"
+            emailext (
+                subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
+                body: """
+                    <p>Pipeline completed with status: ${currentBuild.currentResult}.</p>
+                    <p>Please check the attached build log for details.</p>
+                """,
+                to: 'tkaushik130622@gmail.com',
+                attachLog: true,  // This attaches the full build log
+                mimeType: 'text/html'  // HTML formatting for the email body
+            )
         }
     }
 }
