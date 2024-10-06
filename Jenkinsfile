@@ -18,12 +18,15 @@ pipeline {
             
             emailext (
                 subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
-                body: """
-                    <p>Pipeline completed with status: ${currentBuild.currentResult}.</p>
-                    <p>Please check the attached build log for details.</p>
-                """,
+                body: """<html>
+                            <body>
+                                <h2>Pipeline Notification</h2>
+                                <p>Pipeline completed with status: <strong>${currentBuild.currentResult}</strong>.</p>
+                                <p>Please check the attached build log for details.</p>
+                            </body>
+                          </html>""",
                 to: 'tkaushik130622@gmail.com',
-                attachLog: true,  // This attaches the full build log
+                attachLog: true,  // Attach the full build log
                 mimeType: 'text/html'  // HTML formatting for the email body
             )
         }
